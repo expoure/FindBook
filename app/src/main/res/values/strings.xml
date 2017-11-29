@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">FindBook</string>
+    <string name="txtEditBusca">Busque pelo nome do livro</string>
+    <string name="btnBusca">Buscar</string>
 </resources>
