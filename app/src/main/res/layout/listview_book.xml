@@ -12,15 +12,14 @@
 
 
         <TextView
-            android:id="@+id/nomeLivro"
+            android:id="@+id/obra"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
             android:textStyle="bold"
             android:text="NOME LIVRO"/>
 
         <TextView
-            android:id="@+id/autor"
+            android:id="@+id/exemplaresDisponives"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
