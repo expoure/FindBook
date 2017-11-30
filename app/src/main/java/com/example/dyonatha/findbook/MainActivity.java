@@ -1,19 +1,20 @@
 package com.example.dyonatha.findbook;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
 
-import uk.co.senab.photoview.PhotoViewAttacher;
+import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
 
     private ListView list;
+    List<Map<String, Object>> info;
+    String[] de = {"", ""};
+    int[] para = {R.id.nomeLivro, R.id.autor};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(MainActivity.this, Map.class);
+                Intent intent = new Intent(MainActivity.this, MapView.class);
                 //putExtra...
                 startActivityForResult(intent, 1);
             }
