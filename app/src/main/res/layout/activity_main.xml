@@ -23,7 +23,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:padding="24dp"
-        android:text="@string/btnBusca" />
+        android:text="@string/btnBusca"
+        android:onClick="buscarOnClick"/>
 
 
     <ListView
