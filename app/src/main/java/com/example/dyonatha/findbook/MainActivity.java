@@ -1,13 +1,12 @@
 package com.example.dyonatha.findbook;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -17,7 +16,6 @@ import org.json.JSONArray;
 
 import java.util.List;
 import java.util.Map;
-import android.os.Handler;
 
 import dmax.dialog.SpotsDialog;
 
@@ -27,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private ListView listView;
     private List<Map<String, Object>> info;
     private static MainActivity static_ref;
+    Bitmap shelf = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,13 +41,13 @@ public class MainActivity extends AppCompatActivity {
 
         static_ref = this;
 
-
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(MainActivity.this, MapView.class);
-                //putExtra...
-                startActivityForResult(intent, 1);
+                String nChamada = info.get(position).get("nChamada").toString();
+                buscarEstante(nChamada);
+                dialog = new SpotsDialog(static_ref, "Buscando estante");
+                dialog.show();
             }
         });
     }
@@ -61,7 +60,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         limparListView();
+        buscarLivro(nomeLivro);
 
+        Utils.hideKeyboard(static_ref);
+        dialog = new SpotsDialog(this, "Buscando livros");
+        dialog.show();
+
+    }
+
+    public void buscarLivro(final String nomeLivro) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -83,11 +90,26 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }).start();
+    }
 
-        Utils.hideKeyboard(static_ref);
-        dialog = new SpotsDialog(this, "Buscando livros");
-        dialog.show();
-
+    public void buscarEstante(final String nomeEstante) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+                    Bitmap shelf =  ShelfApi.getShelf(nomeEstante);
+                    static_ref.shelf = shelf;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            dialog.dismiss();
+                            Intent intent = new Intent(MainActivity.this, MapView.class);
+                            startActivity(intent);
+                        }
+                    });
+                }
+            }
+        }).start();
     }
 
     public void atualizarListView(List<Map<String, Object>> info) {
@@ -100,6 +122,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void limparListView() {
         listView.setAdapter(null);
+    }
+
+    public static MainActivity getInstance() {
+        return static_ref;
     }
 
 }
